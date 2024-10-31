@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Javademy.Pages.CourseReadPage"
+             xmlns:data="clr-namespace:Javademy.Data"
+             BackgroundColor="#FAFAFA">
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+        <!-- Top Button for Refresh -->
+        <Button Grid.Row="0" Grid.Column="0"
+                Text="Refresh Courses"
+                Margin="20, 10, 20, 10"
+                Clicked="OnRefreshButtonClicked"
+                BackgroundColor="#4A90E2"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="20"
+                Padding="10,5" 
+                VerticalOptions="Start"/>
+
+        <!-- Catalog Collection View -->
+        <CollectionView x:Name="CourseCollectionView"
+                        Margin="20"
+                        SelectionMode="Single"
+                        HeightRequest="600">
+            <!-- Vertical Layout for Items -->
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="20" />
+            </CollectionView.ItemsLayout>
+
+            <!-- Item Template -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="data:Course">
+                    <!-- Card-like Layout for Each Item -->
+                    <Frame HasShadow="True"
+                           CornerRadius="15"
+                           Padding="20"
+                           BackgroundColor="White"
+                           Margin="0,0,0,20"
+                           BorderColor="#D1D1D1">
+                        <VerticalStackLayout Spacing="8">
+                            <!-- Course Image -->
+                            <Image Source="{Binding ImageName}" 
+                                   HeightRequest="150" 
+                                   Aspect="AspectFill"
+                                   HorizontalOptions="FillAndExpand" />
+
+                            <!-- Course Name with Bold Font -->
+                            <Label Text="{Binding Name}"
+                                   FontSize="Large"
+                                   FontAttributes="Bold"
+                                   TextColor="#333" />
+
+                            <!-- Course Description with Subtle Color -->
+                            <Label Text="{Binding Description}"
+                                   FontSize="Medium"
+                                   TextColor="#666"
+                                   LineBreakMode="WordWrap" />
+
+                            <!-- Course Duration -->
+                            <Label Text="{Binding Duration, StringFormat='Duration: {0} minutes'}"
+                                   FontSize="Small"
+                                   TextColor="#888"
+                                   FontAttributes="Italic" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+    <!-- Add a gradient background for a more elegant look -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#E5E5E5" Offset="0.0" />
+            <GradientStop Color="#FAFAFA" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+</ContentPage>
