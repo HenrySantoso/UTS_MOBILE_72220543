@@ -72,11 +72,16 @@ namespace Javademy.Pages
                 await DisplayAlert("Error", $"Failed to update category: {ex.Message}", "OK");
             }
         }
-
         private void OnResetButtonClicked(object sender, EventArgs e)
         {
             // Reset the fields to the selected category details
             LoadCategoryDetails(_currentCategoryId);
+        }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            // Navigate back to the CategoryReadPage
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

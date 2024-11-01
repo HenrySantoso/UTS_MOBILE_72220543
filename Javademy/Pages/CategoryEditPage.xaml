@@ -5,6 +5,12 @@
              Title="Edit Category"
              BackgroundColor="#FAFAFA">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Back" 
+                     IconImageSource="back.png" 
+                     Clicked="OnBackButtonClicked"/>
+    </ContentPage.ToolbarItems>
+
     <VerticalStackLayout Padding="20" Spacing="15">
         <Label 
             Text="Edit Category"

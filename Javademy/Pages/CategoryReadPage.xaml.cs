@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Linq; // Import for LINQ
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Javademy.Data;
-using System.Net.Http.Json;
 
 namespace Javademy.Pages
 {
     public partial class CategoryReadPage : ContentPage
     {
         private readonly HttpClient _httpClient = new HttpClient();
+        private List<Category> allCategories; // Store all categories
 
         public CategoryReadPage()
         {
@@ -21,8 +24,8 @@ namespace Javademy.Pages
         {
             try
             {
-                var categories = await _httpClient.GetFromJsonAsync<List<Category>>("https://actualbackendapp.azurewebsites.net/api/v1/Categories");
-                CategoryCollectionView.ItemsSource = categories;
+                allCategories = await _httpClient.GetFromJsonAsync<List<Category>>("https://actualbackendapp.azurewebsites.net/api/v1/Categories");
+                CategoryCollectionView.ItemsSource = allCategories; // Display all categories initially
             }
             catch (Exception ex)
             {
@@ -72,6 +75,19 @@ namespace Javademy.Pages
         private void OnRefreshButtonClicked(object sender, EventArgs e)
         {
             LoadCategories();
+        }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = e.NewTextValue?.ToLower() ?? string.Empty;
+
+            // Filter categories based on search input
+            var filteredCategories = string.IsNullOrWhiteSpace(searchText)
+                ? allCategories // Show all if search text is empty
+                : allCategories.Where(c => c.Name.ToLower().Contains(searchText)).ToList();
+
+            // Update the CollectionView with filtered results
+            CategoryCollectionView.ItemsSource = filteredCategories;
         }
     }
 }

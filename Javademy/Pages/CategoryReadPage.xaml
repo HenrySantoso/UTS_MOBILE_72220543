@@ -5,22 +5,29 @@
              xmlns:data="clr-namespace:Javademy.Data"
              BackgroundColor="#FAFAFA">
 
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
-        <!-- Top Button for Refresh -->
-        <Button Grid.Row="0" Grid.Column="0"
-                Text="Refresh Categories"
-                Margin="20, 10, 20, 10"
-                Clicked="OnRefreshButtonClicked"
-                BackgroundColor="#4A90E2"
-                TextColor="White"
-                FontAttributes="Bold"
-                CornerRadius="20"
-                Padding="10,5" 
-                VerticalOptions="Start"/>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="refresh.png" 
+                     Clicked="OnRefreshButtonClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+        <!-- Header Section -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,10">
+            <!-- Search Entry -->
+            <Entry x:Name="SearchEntry"
+                   Placeholder="Search Categories"
+                   Margin="10,0,0,0"
+                   BackgroundColor="#E5E5E5"
+                   TextColor="#333"
+                   VerticalOptions="Center"
+                   TextChanged="OnSearchTextChanged" />
+            <!-- Handle text change event -->
+        </Grid>
 
         <!-- Catalog Collection View -->
         <CollectionView x:Name="CategoryCollectionView"
-                        Margin="30,60,30,10"
+                        Grid.Row="1"
+                        Margin="30,10"
                         SelectionMode="Single"
                         HeightRequest="600">
             <!-- Vertical Layout for Items -->
