@@ -66,6 +66,9 @@
 	  <MauiXaml Update="Pages\CategoryCreatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\CategoryEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\CategoryReadPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

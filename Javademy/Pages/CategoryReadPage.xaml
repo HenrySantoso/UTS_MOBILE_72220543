@@ -5,7 +5,7 @@
              xmlns:data="clr-namespace:Javademy.Data"
              BackgroundColor="#FAFAFA">
 
-    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
         <!-- Top Button for Refresh -->
         <Button Grid.Row="0" Grid.Column="0"
                 Text="Refresh Categories"
@@ -20,7 +20,7 @@
 
         <!-- Catalog Collection View -->
         <CollectionView x:Name="CategoryCollectionView"
-                        Margin="20"
+                        Margin="30,60,30,10"
                         SelectionMode="Single"
                         HeightRequest="600">
             <!-- Vertical Layout for Items -->
@@ -39,6 +39,12 @@
                            Margin="0,0,0,20"
                            BorderColor="#D1D1D1">
                         <VerticalStackLayout Spacing="8">
+                            <!-- Category ID -->
+                            <Label Text="{Binding CategoryId}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   TextColor="#333" />
+
                             <!-- Category Name with Bold Font -->
                             <Label Text="{Binding Name}"
                                    FontSize="Large"
@@ -51,6 +57,28 @@
                                    TextColor="#666"
                                    LineBreakMode="WordWrap" />
 
+                            <!-- Action Buttons (Edit and Delete) -->
+                            <HorizontalStackLayout Spacing="10">
+                                <!-- Edit Button -->
+                                <Button Text="Edit"
+                                        BackgroundColor="#4A90E2"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        Padding="10,5"
+                                        CommandParameter="{Binding CategoryId}"
+                                        Clicked="OnEditButtonClicked"/>
+
+                                <!-- Delete Button -->
+                                <Button Text="Delete"
+                                        BackgroundColor="#D9534F"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        Padding="10,5"
+                                        CommandParameter="{Binding CategoryId}"
+                                        Clicked="OnDeleteButtonClicked"/>
+                            </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

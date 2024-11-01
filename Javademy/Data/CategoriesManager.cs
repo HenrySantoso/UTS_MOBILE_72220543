@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
@@ -35,10 +36,6 @@ namespace Javademy.Data
             return client;
         }
 
-        // PARTS CRUD operations are here (as in your code)
-
-        // CATEGORY CRUD operations
-
         public static async Task<IEnumerable<Category>> GetAllCategories()
         {
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
@@ -51,6 +48,28 @@ namespace Javademy.Data
             {
                 PropertyNameCaseInsensitive = true,
             });
+        }
+
+        private static async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            var httpClient = new HttpClient();
+            // Adjust the URL according to your API structure
+            string apiUrl = $"https://actualbackendapp.azurewebsites.net/api/v1/Categories/{categoryId}";
+
+            try
+            {
+                var response = await httpClient.GetAsync(apiUrl);
+                response.EnsureSuccessStatusCode(); // Will throw if not a success code.
+
+                var category = await response.Content.ReadFromJsonAsync<Category>();
+                return category;
+            }
+            catch (HttpRequestException e)
+            {
+                // Handle exception
+                Debug.WriteLine($"Request error: {e.Message}");
+                return null;
+            }
         }
 
         public static async Task<Category> AddCategory(string name, string description)
@@ -85,7 +104,6 @@ namespace Javademy.Data
                 throw new Exception($"Error saving category: {response.StatusCode} - {errorContent}");
             }
         }
-
 
         public static async Task UpdateCategory(Category category)
         {
