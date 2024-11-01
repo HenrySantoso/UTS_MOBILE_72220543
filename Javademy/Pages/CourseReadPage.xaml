@@ -5,18 +5,21 @@
              xmlns:data="clr-namespace:Javademy.Data"
              BackgroundColor="#FAFAFA">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="refresh.png" 
+                     Clicked="OnRefreshButtonClicked"/>
+    </ContentPage.ToolbarItems>
+
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
-        <!-- Top Button for Refresh -->
-        <Button Grid.Row="0" Grid.Column="0"
-                Text="Refresh Courses"
-                Margin="20, 10, 20, 10"
-                Clicked="OnRefreshButtonClicked"
-                BackgroundColor="#4A90E2"
-                TextColor="White"
-                FontAttributes="Bold"
-                CornerRadius="20"
-                Padding="10,5" 
-                VerticalOptions="Start"/>
+        <!-- Search Entry for Courses -->
+        <Entry x:Name="SearchEntry"
+               Placeholder="Search Courses by Name"
+               Margin="20, 10, 20, 10"
+               BackgroundColor="#E5E5E5"
+               TextColor="#333"
+               VerticalOptions="Start"
+               TextChanged="OnSearchTextChanged"/>
+        <!-- Ensure to connect TextChanged event -->
 
         <!-- Catalog Collection View -->
         <CollectionView x:Name="CourseCollectionView"
