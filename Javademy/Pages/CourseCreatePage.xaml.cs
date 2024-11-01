@@ -1,63 +1,67 @@
-using Javademy.Data; // Ensure you have the correct namespace
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using Javademy.Data;
 
 namespace Javademy.Pages
 {
     public partial class CourseCreatePage : ContentPage
     {
-        private readonly HttpClient _httpClient = new HttpClient();
-
         public CourseCreatePage()
         {
             InitializeComponent();
-            LoadCategories();
-        }
-
-        private async void LoadCategories()
-        {
-            try
-            {
-                // Replace with your actual API URL
-                var categories = await _httpClient.GetFromJsonAsync<List<Category>>("https://actualbackendapp.azurewebsites.net/api/v1/Categories");
-
-                // Check if categories are retrieved
-                if (categories != null)
-                {
-                    CourseCategoryPicker.ItemsSource = categories.Select(c => c.Name).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., show an error message)
-                await DisplayAlert("Error", $"Failed to load categories: {ex.Message}", "OK");
-            }
         }
 
         private async void OnSubmitClicked(object sender, EventArgs e)
         {
-            string courseName = CourseNameEntry.Text;
-            string courseDescription = CourseDescriptionEditor.Text;
-            string courseDuration = CourseDurationEntry.Text;
-            string courseCategory = CourseCategoryPicker.SelectedItem?.ToString(); // Get the selected category
+            // Gather input data
+            string courseName = CourseNameEntry.Text?.Trim();
+            string courseImageName = CourseImageNameEntry.Text?.Trim(); // Image Name entry
+            string courseDescription = CourseDescriptionEditor.Text?.Trim();
+            string courseDurationText = CourseDurationEntry.Text?.Trim();
+            int? courseDuration = int.TryParse(courseDurationText, out int duration) ? duration : (int?)null;
 
-            // Add your logic to save the course using the provided values
+            // Get category ID from the Entry
+            string categoryIdText = CourseCategoryIdEntry.Text?.Trim();
+            int? courseCategoryId = int.TryParse(categoryIdText, out int categoryId) ? categoryId : (int?)null;
 
-            // Optionally show a success message
-            await DisplayAlert("Success", "Course created successfully!", "OK");
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(courseName) || string.IsNullOrWhiteSpace(courseImageName) ||
+                string.IsNullOrWhiteSpace(courseDescription) || courseDuration == null || courseCategoryId == null)
+            {
+                await DisplayAlert("Error", "Please fill in all fields correctly.", "OK");
+                return; // Exit early if validation fails
+            }
+
+            // Add the new course using CoursesManager
+            try
+            {
+                var newCourse = await CoursesManager.AddCourse(courseName, courseImageName, courseDuration, courseDescription, courseCategoryId);
+                await DisplayAlert("Success", "Course created successfully!", "OK");
+                ResetForm(); // Reset the form after successful submission
+            }
+            catch (HttpRequestException httpEx) // Handle specific exception
+            {
+                await DisplayAlert("Error", $"HTTP Error: {httpEx.Message}", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to create course: {ex.Message}", "OK");
+            }
         }
 
         private void OnResetClicked(object sender, EventArgs e)
         {
-            // Clear all entries and reset the picker
+            ResetForm(); // Call the reset method
+        }
+
+        private void ResetForm()
+        {
             CourseNameEntry.Text = string.Empty;
+            CourseImageNameEntry.Text = string.Empty; // Reset Image Name entry
             CourseDescriptionEditor.Text = string.Empty;
             CourseDurationEntry.Text = string.Empty;
-            CourseCategoryPicker.SelectedItem = null;
+            CourseCategoryIdEntry.Text = string.Empty; // Reset Category ID entry
         }
     }
 }

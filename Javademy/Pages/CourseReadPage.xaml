@@ -20,7 +20,7 @@
 
         <!-- Catalog Collection View -->
         <CollectionView x:Name="CourseCollectionView"
-                        Margin="20"
+                        Margin="30,60,30,10"
                         SelectionMode="Single"
                         HeightRequest="600">
             <!-- Vertical Layout for Items -->
@@ -62,6 +62,17 @@
                                    FontSize="Small"
                                    TextColor="#888"
                                    FontAttributes="Italic" />
+
+                            <!-- Delete Button -->
+                            <Button Text="Delete"
+                                    BackgroundColor="#D9534F"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    CornerRadius="20"
+                                    Padding="10,5"
+                                    Clicked="OnDeleteButtonClicked"
+                                    CommandParameter="{Binding CourseId}" />
+                            <!-- Bind CourseId to CommandParameter -->
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

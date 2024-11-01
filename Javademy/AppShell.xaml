@@ -5,11 +5,19 @@
        FlyoutIcon="dotnet_bot.png"
        FlyoutBehavior="Flyout">
 
+    <FlyoutItem Title="Login" Icon="login.png">
+        <!-- Added Login page -->
+        <ShellContent Title="Login" Icon="login.png" 
+            ContentTemplate="{DataTemplate local:LoginPage}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Home" Icon="home.png">
         <ShellContent Title="Moon Phase" Icon="category.png"
-            ContentTemplate="{DataTemplate local:HomePage}"/>
+        ContentTemplate="{DataTemplate local:HomePage}" 
+        Route="Home"/>
     </FlyoutItem>
-    
+
+
     <FlyoutItem Title="Category" Icon="category.png">
         <ShellContent Title="List Categories" Icon="read.png" 
             ContentTemplate="{DataTemplate local:CategoryReadPage}" />
@@ -23,6 +31,4 @@
         <ShellContent Title="Add Course" Icon="add.png" 
             ContentTemplate="{DataTemplate local:CourseCreatePage}"/>
     </FlyoutItem>
-
-
 </Shell>

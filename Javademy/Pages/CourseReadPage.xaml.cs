@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Javademy.Data;
 using Microsoft.Maui.Controls;
+using Javademy.Data;
 
 namespace Javademy.Pages
 {
@@ -12,25 +11,38 @@ namespace Javademy.Pages
         public CourseReadPage()
         {
             InitializeComponent();
-            LoadCoursesAsync();
+            LoadCourses();
         }
 
-        private async void OnRefreshButtonClicked(object sender, EventArgs e)
+        private async Task LoadCourses() // Change return type to Task
         {
-            await LoadCoursesAsync();
+            var courses = await CoursesManager.GetAllCourses();
+            CourseCollectionView.ItemsSource = courses;
         }
 
-        private async Task LoadCoursesAsync()
+        private async void OnRefreshButtonClicked(object sender, EventArgs e) // Keep it as void
         {
-            try
+            await LoadCourses(); // Refresh the course list
+        }
+
+        private async void OnDeleteButtonClicked(object sender, EventArgs e) // Keep it as void
+        {
+            var button = (Button)sender;
+            int courseId = (int)button.CommandParameter;
+
+            bool confirm = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this course?", "Yes", "No");
+            if (confirm)
             {
-                var courses = await CoursesManager.GetAllCourses();
-                CourseCollectionView.ItemsSource = courses.ToList();
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception (e.g., show an alert or log the error)
-                await DisplayAlert("Error", "Failed to load courses: " + ex.Message, "OK");
+                try
+                {
+                    await CoursesManager.DeleteCourse(courseId);
+                    await DisplayAlert("Success", "Course deleted successfully!", "OK");
+                    await LoadCourses(); // Refresh the list after deletion
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", $"Failed to delete course: {ex.Message}", "OK");
+                }
             }
         }
     }

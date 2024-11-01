@@ -53,8 +53,8 @@ namespace Javademy.Data
 
         public static async Task<Course> AddCourse(string name, string imageName, int? duration, string description, int? categoryId)
         {
-            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
-                return new Course();
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Course name is required.");
 
             var course = new Course
             {
@@ -66,17 +66,26 @@ namespace Javademy.Data
             };
 
             var msg = new HttpRequestMessage(HttpMethod.Post, Url);
-            msg.Content = JsonContent.Create<Course>(course);
+            msg.Content = JsonContent.Create(course);
+
             var client = await GetClient();
             var response = await client.SendAsync(msg);
-            response.EnsureSuccessStatusCode();
-            var returnedJson = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<Course>(returnedJson, new JsonSerializerOptions
+            if (response.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true,
-            });
+                var returnedJson = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Course>(returnedJson, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error saving course: {response.StatusCode} - {errorContent}");
+            }
         }
+
 
         public static async Task UpdateCourse(Course course)
         {

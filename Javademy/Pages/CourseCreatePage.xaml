@@ -21,6 +21,14 @@
                BackgroundColor="#E5E5E5"
                TextColor="#333" />
 
+        <!-- Image Name Entry -->
+        <Entry x:Name="CourseImageNameEntry" 
+               Placeholder="Image Name" 
+               FontSize="18"
+               Margin="0,0,0,10"
+               BackgroundColor="#E5E5E5"
+               TextColor="#333" />
+
         <!-- Course Description Editor -->
         <Editor x:Name="CourseDescriptionEditor" 
                 Placeholder="Course Description" 
@@ -39,15 +47,16 @@
                TextColor="#333" 
                Keyboard="Numeric" />
 
-        <!-- Course Category Picker -->
-        <Picker x:Name="CourseCategoryPicker"
-                Title="Select Course Category"
+        <!-- Course Category ID Entry -->
+        <Entry x:Name="CourseCategoryIdEntry" 
+                Placeholder="Enter Category ID"
                 FontSize="18"
                 Margin="0,0,0,10"
                 BackgroundColor="#E5E5E5"
-                TextColor="#333" />
+                TextColor="#333"
+                Keyboard="Numeric" />
 
-        <Button Text="Submit"
+            <Button Text="Submit"
                 BackgroundColor="#4A90E2"
                 TextColor="White"
                 FontAttributes="Bold"
@@ -56,7 +65,7 @@
                 HorizontalOptions="Center"
                 Clicked="OnSubmitClicked" />
 
-        <Button Text="Reset"
+            <Button Text="Reset"
                 BackgroundColor="#D9534F"
                 TextColor="White"
                 FontAttributes="Bold"
