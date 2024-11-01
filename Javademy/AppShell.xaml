@@ -2,12 +2,12 @@
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:Javademy.Pages"
-       FlyoutIcon="dotnet_bot.png"
+       FlyoutIcon="content.png"
        FlyoutBehavior="Flyout">
 
-    <FlyoutItem Title="Login" Icon="login.png">
+    <FlyoutItem Title="Login User" Icon="login.png">
         <!-- Added Login page -->
-        <ShellContent Title="Login" Icon="login.png" 
+        <ShellContent Title="Login" Icon="login.png"
             ContentTemplate="{DataTemplate local:LoginPage}" />
     </FlyoutItem>
 
