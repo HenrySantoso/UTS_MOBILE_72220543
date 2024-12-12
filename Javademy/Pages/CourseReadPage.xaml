@@ -67,14 +67,26 @@
                                    FontAttributes="Italic" />
 
                             <!-- Delete Button -->
-                            <Button Text="Delete"
-                                    BackgroundColor="#D9534F"
-                                    TextColor="White"
-                                    FontAttributes="Bold"
-                                    CornerRadius="20"
-                                    Padding="10,5"
-                                    Clicked="OnDeleteButtonClicked"
-                                    CommandParameter="{Binding CourseId}" />
+                            <HorizontalStackLayout Spacing="10">
+                                <Button Text="Edit"
+                                        BackgroundColor="#4A90E2"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        Padding="10,5"
+                                        CommandParameter="{Binding CourseId}"
+                                        Clicked="OnEditButtonClicked"/>
+                                
+                                <Button Text="Delete"
+                                        BackgroundColor="#D9534F"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        Padding="10,5"
+                                        Clicked="OnDeleteButtonClicked"
+                                        CommandParameter="{Binding CourseId}" />
+                                
+                            </HorizontalStackLayout>
                             <!-- Bind CourseId to CommandParameter -->
                         </VerticalStackLayout>
                     </Frame>

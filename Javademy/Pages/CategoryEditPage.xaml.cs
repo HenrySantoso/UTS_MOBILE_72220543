@@ -15,7 +15,6 @@ namespace Javademy.Pages
         public CategoryEditPage()
         {
             InitializeComponent();
-            // This constructor may not be used if you always want to pass a category ID.
         }
 
         public CategoryEditPage(int categoryId)

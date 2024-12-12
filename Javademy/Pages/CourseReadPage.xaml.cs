@@ -24,6 +24,7 @@ namespace Javademy.Pages
         {
             try
             {
+                //allCourses = CoursesManager.GetAllCourses();
                 allCourses = await _httpClient.GetFromJsonAsync<List<Course>>("https://actualbackendapp.azurewebsites.net/api/Courses");
                 CourseCollectionView.ItemsSource = allCourses; // Display all courses initially
             }
@@ -31,6 +32,16 @@ namespace Javademy.Pages
             {
                 await DisplayAlert("Error", $"Failed to load courses: {ex.Message}", "OK");
             }
+        }
+
+        private async void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            // Get the category ID from the button's CommandParameter
+            var button = (Button)sender;
+            int courseId = (int)button.CommandParameter;
+
+            // Navigate to CategoryEditPage and pass the category ID
+            await Navigation.PushAsync(new CourseEditPage(courseId));
         }
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
@@ -43,7 +54,7 @@ namespace Javademy.Pages
                 {
                     try
                     {
-                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/v1/Courses/{courseId}");
+                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/Courses/{courseId}");
                         if (response.IsSuccessStatusCode)
                         {
                             await DisplayAlert("Success", "Course deleted successfully!", "OK");
@@ -67,17 +78,49 @@ namespace Javademy.Pages
             LoadCourses();
         }
 
-        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        //private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    string searchText = e.NewTextValue?.ToLower() ?? string.Empty;
+
+        //    // Filter courses based on search input
+        //    var filteredCourses = string.IsNullOrWhiteSpace(searchText)
+        //        ? allCourses // Show all if search text is empty
+        //        : allCourses.Where(c => c.Name.ToLower().Contains(searchText)).ToList();
+
+        //    // Update the CollectionView with filtered results
+        //    CourseCollectionView.ItemsSource = filteredCourses;
+        //}
+
+        private async void OnSearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = e.NewTextValue?.ToLower() ?? string.Empty;
+            string searchText = e.NewTextValue?.Trim();
 
-            // Filter courses based on search input
-            var filteredCourses = string.IsNullOrWhiteSpace(searchText)
-                ? allCourses // Show all if search text is empty
-                : allCourses.Where(c => c.Name.ToLower().Contains(searchText)).ToList();
+            // If search text is empty, reset to show all courses
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                CourseCollectionView.ItemsSource = allCourses; // Assuming `allCourses` contains the full course list
+                return;
+            }
 
-            // Update the CollectionView with filtered results
-            CourseCollectionView.ItemsSource = filteredCourses;
+            try
+            {
+                // Call GetCourseByName to fetch the course matching the search text
+                var course = await CoursesManager.GetCourseByName(searchText);
+                if (course != null)
+                {
+                    // Update the CollectionView with the single course result
+                    CourseCollectionView.ItemsSource = new List<Course> { course };
+                }
+                else
+                {
+                    // If no course is found, clear the CollectionView
+                    CourseCollectionView.ItemsSource = new List<Course>();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Could not retrieve course: {ex.Message}", "OK");
+            }
         }
     }
 }

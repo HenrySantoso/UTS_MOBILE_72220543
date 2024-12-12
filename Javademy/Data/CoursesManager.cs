@@ -37,18 +37,13 @@ namespace Javademy.Data
 
         // CRUD operations for Courses
 
-        public static async Task<IEnumerable<Course>> GetAllCourses()
+        public static async Task<List<Course>> GetAllCourses()
         {
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
                 return new List<Course>();
 
             var client = await GetClient();
-            string result = await client.GetStringAsync(Url);
-
-            return JsonSerializer.Deserialize<List<Course>>(result, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            });
+            return await client.GetFromJsonAsync<List<Course>>("https://actualbackendapp.azurewebsites.net/api/Courses");
         }
 
         public static async Task<Course> AddCourse(string name, string imageName, int? duration, string description, int? categoryId)
@@ -108,6 +103,32 @@ namespace Javademy.Data
             var client = await GetClient();
             var response = await client.SendAsync(msg);
             response.EnsureSuccessStatusCode();
+        }
+
+        public static async Task<Course> GetCourseByName(string name)
+        {
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Course name is required.");
+
+            var client = await GetClient();
+            var response = await client.GetAsync($"{Url}/search/{name}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var returnedJson = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Course>(returnedJson, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error retrieving course: {response.StatusCode} - {errorContent}");
+            }
         }
     }
 }

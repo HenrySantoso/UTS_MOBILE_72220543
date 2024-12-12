@@ -43,7 +43,7 @@ namespace Javademy.Pages
                 {
                     try
                     {
-                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/v1/Categories/{categoryId}");
+                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/Categories/{categoryId}");
                         if (response.IsSuccessStatusCode)
                         {
                             await DisplayAlert("Success", "Category deleted successfully!", "OK");
