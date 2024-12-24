@@ -10,8 +10,8 @@ namespace Javademy.Data
 {
     public static class CategoriesManager
     {
-        private static readonly string BaseAddress = "https://actualbackendapp.azurewebsites.net";
-        private static readonly string Url = $"{BaseAddress}/api/v1/Categories";
+        private static readonly string BaseAddress = "https://actbackendseervices.azurewebsites.net";
+        private static readonly string Url = $"{BaseAddress}/api/categories";
         private static string authorizationKey;
         private static HttpClient client;
 
@@ -22,7 +22,6 @@ namespace Javademy.Data
                 return client;
 
             client = new HttpClient();
-            await SetAuthorizationHeaderAsync();
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.ConnectionClose = true;
 
@@ -30,15 +29,15 @@ namespace Javademy.Data
         }
 
         // Method to set the authorization header
-        private static async Task SetAuthorizationHeaderAsync()
-        {
-            if (string.IsNullOrEmpty(authorizationKey))
-            {
-                var response = await client.GetStringAsync($"{BaseAddress}/api/v1/login"); // Ensure this is the correct login endpoint
-                authorizationKey = JsonSerializer.Deserialize<string>(response);
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authorizationKey);
-            }
-        }
+        //private static async Task SetAuthorizationHeaderAsync()
+        //{
+        //    if (string.IsNullOrEmpty(authorizationKey))
+        //    {
+        //        var response = await client.GetStringAsync($"{BaseAddress}/api/v1/login"); // Ensure this is the correct login endpoint
+        //        authorizationKey = JsonSerializer.Deserialize<string>(response);
+        //        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authorizationKey);
+        //    }
+        //}
 
         // Method to get all categories
         public static async Task<IEnumerable<Category>> GetAllCategories()

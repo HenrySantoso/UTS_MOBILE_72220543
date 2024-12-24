@@ -9,8 +9,8 @@ namespace Javademy.Data
 {
     public static class CoursesManager
     {
-        static readonly string BaseAddress = "https://actualbackendapp.azurewebsites.net"; // Update with the actual base address
-        static readonly string Url = $"{BaseAddress}/api/Courses"; // Update with the actual endpoint for courses
+        static readonly string BaseAddress = "https://actbackendseervices.azurewebsites.net"; // Update with the actual base address
+        static readonly string Url = $"{BaseAddress}/api/courses"; // Update with the actual endpoint for courses
         private static string authorizationKey;
 
         static HttpClient client;
@@ -43,7 +43,7 @@ namespace Javademy.Data
                 return new List<Course>();
 
             var client = await GetClient();
-            return await client.GetFromJsonAsync<List<Course>>("https://actualbackendapp.azurewebsites.net/api/Courses");
+            return await client.GetFromJsonAsync<List<Course>>("https://actbackendseervices.azurewebsites.net/api/courses");
         }
 
         public static async Task<Course> AddCourse(string name, string imageName, int? duration, string description, int? categoryId)

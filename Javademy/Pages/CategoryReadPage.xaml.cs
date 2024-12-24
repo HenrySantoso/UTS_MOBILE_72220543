@@ -24,7 +24,7 @@ namespace Javademy.Pages
         {
             try
             {
-                allCategories = await _httpClient.GetFromJsonAsync<List<Category>>("https://actualbackendapp.azurewebsites.net/api/v1/Categories");
+                allCategories = await _httpClient.GetFromJsonAsync<List<Category>>("https://actbackendseervices.azurewebsites.net/api/categories");
                 CategoryCollectionView.ItemsSource = allCategories; // Display all categories initially
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Javademy.Pages
                 {
                     try
                     {
-                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/Categories/{categoryId}");
+                        var response = await _httpClient.DeleteAsync($"https://actbackendseervices.azurewebsites.net/api/categories/{categoryId}");
                         if (response.IsSuccessStatusCode)
                         {
                             await DisplayAlert("Success", "Category deleted successfully!", "OK");

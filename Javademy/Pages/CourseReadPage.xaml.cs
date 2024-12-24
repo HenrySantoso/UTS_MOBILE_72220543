@@ -25,7 +25,7 @@ namespace Javademy.Pages
             try
             {
                 //allCourses = CoursesManager.GetAllCourses();
-                allCourses = await _httpClient.GetFromJsonAsync<List<Course>>("https://actualbackendapp.azurewebsites.net/api/Courses");
+                allCourses = await _httpClient.GetFromJsonAsync<List<Course>>("https://actbackendseervices.azurewebsites.net/api/courses");
                 CourseCollectionView.ItemsSource = allCourses; // Display all courses initially
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace Javademy.Pages
                 {
                     try
                     {
-                        var response = await _httpClient.DeleteAsync($"https://actualbackendapp.azurewebsites.net/api/Courses/{courseId}");
+                        var response = await _httpClient.DeleteAsync($"https://actbackendseervices.azurewebsites.net/api/courses/{courseId}");
                         if (response.IsSuccessStatusCode)
                         {
                             await DisplayAlert("Success", "Course deleted successfully!", "OK");
@@ -78,49 +78,49 @@ namespace Javademy.Pages
             LoadCourses();
         }
 
-        //private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    string searchText = e.NewTextValue?.ToLower() ?? string.Empty;
-
-        //    // Filter courses based on search input
-        //    var filteredCourses = string.IsNullOrWhiteSpace(searchText)
-        //        ? allCourses // Show all if search text is empty
-        //        : allCourses.Where(c => c.Name.ToLower().Contains(searchText)).ToList();
-
-        //    // Update the CollectionView with filtered results
-        //    CourseCollectionView.ItemsSource = filteredCourses;
-        //}
-
-        private async void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = e.NewTextValue?.Trim();
+            string searchText = e.NewTextValue?.ToLower() ?? string.Empty;
 
-            // If search text is empty, reset to show all courses
-            if (string.IsNullOrWhiteSpace(searchText))
-            {
-                CourseCollectionView.ItemsSource = allCourses; // Assuming `allCourses` contains the full course list
-                return;
-            }
+            // Filter courses based on search input
+            var filteredCourses = string.IsNullOrWhiteSpace(searchText)
+                ? allCourses // Show all if search text is empty
+                : allCourses.Where(c => c.Name.ToLower().Contains(searchText)).ToList();
 
-            try
-            {
-                // Call GetCourseByName to fetch the course matching the search text
-                var course = await CoursesManager.GetCourseByName(searchText);
-                if (course != null)
-                {
-                    // Update the CollectionView with the single course result
-                    CourseCollectionView.ItemsSource = new List<Course> { course };
-                }
-                else
-                {
-                    // If no course is found, clear the CollectionView
-                    CourseCollectionView.ItemsSource = new List<Course>();
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Could not retrieve course: {ex.Message}", "OK");
-            }
+            // Update the CollectionView with filtered results
+            CourseCollectionView.ItemsSource = filteredCourses;
         }
+
+        //private async void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    string searchText = e.NewTextValue?.Trim();
+
+        //    // If search text is empty, reset to show all courses
+        //    if (string.IsNullOrWhiteSpace(searchText))
+        //    {
+        //        CourseCollectionView.ItemsSource = allCourses; // Assuming `allCourses` contains the full course list
+        //        return;
+        //    }
+
+        //    try
+        //    {
+        //        // Call GetCourseByName to fetch the course matching the search text
+        //        var course = await CoursesManager.GetCourseByName(searchText);
+        //        if (course != null)
+        //        {
+        //            // Update the CollectionView with the single course result
+        //            CourseCollectionView.ItemsSource = new List<Course> { course };
+        //        }
+        //        else
+        //        {
+        //            // If no course is found, clear the CollectionView
+        //            CourseCollectionView.ItemsSource = new List<Course>();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await DisplayAlert("Error", $"Could not retrieve course: {ex.Message}", "OK");
+        //    }
+        //}
     }
 }
